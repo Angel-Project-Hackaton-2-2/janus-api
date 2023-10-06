@@ -68,3 +68,17 @@ async def insert_diary(request: Request, fingerprint: str):
         },
     )
     return {"status": "success", "status_code": 200}
+
+
+@router.get("/api/diary/{fingerprint}")
+async def get_diary(fingerprint: str):
+    db = client.get_db()
+    diary_collections = db["diaries"]
+
+    diary = diary_collections.find_one({"fingerprint": fingerprint})
+
+    if diary is None:
+        return HTTPException(status_code=400, detail="Diary does not exist")
+
+    diary["_id"] = str(diary["_id"])
+    return {"status": "success", "status_code": 200, "data": diary}
