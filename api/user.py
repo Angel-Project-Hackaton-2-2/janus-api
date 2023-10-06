@@ -1,8 +1,7 @@
 from fastapi import APIRouter, HTTPException, Request
-from db import MongoDBClient
+from api import client
 
 router = APIRouter()
-client = MongoDBClient()
 
 
 @router.post("/api/users")
