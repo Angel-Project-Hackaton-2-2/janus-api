@@ -1,5 +1,9 @@
 fastapi
+uvicorn
+pandas
 numpy
 cohere
-annoy
 openai
+scikit-learn
+nltk
+annoy
