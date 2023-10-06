@@ -127,7 +127,7 @@ async def create_message(request: Request, fingerprint: str, conversation_type: 
 
 
 @router.get("/api/conversation/{fingerprint}/{conversation_type}")
-async def get_conversastion(request: Request, fingerprint: str, conversation_type: str):
+async def get_conversastion(fingerprint: str, conversation_type: str):
     db = client.get_db()
     conversation_collections = db["conversations"]
 
