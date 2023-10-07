@@ -31,7 +31,7 @@ def calculate_embedding(df, query):
     )
 
     results = pd.DataFrame(
-        {"texts": df.iloc[similar_item_ids[0]]["text"], "distance": similar_item_ids[1]}
+        {"texts": df.iloc[similar_item_ids[0]]["content"], "distance": similar_item_ids[1]}
     )
 
     response = co.summarize(

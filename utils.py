@@ -35,10 +35,6 @@ def preprocess(text):
 
 
 def count_frequency(documents, threshold=0.1):
-    def filter(text):
-        tokens = [word for word in text.split() if word in filtered_words]
-        return " ".join(tokens)
-
     vectorizer = TfidfVectorizer()
     X = vectorizer.fit_transform(documents)
     feature_names = vectorizer.get_feature_names_out()
@@ -47,15 +43,19 @@ def count_frequency(documents, threshold=0.1):
         np.where(np.mean(tfidf_values, axis=0) < threshold)
     ]
 
-    filtered_documents = list(map(filter, documents))
-    return filtered_documents
+    return filtered_words
 
 
 def vectorize_diary(diary):
+    def filter(text):
+        tokens = [word for word in text.split() if word in filtered_words]
+        return " ".join(tokens)
+
     diary = diary["data"]["diaries"]
     documents = [entry["content"] for entry in diary]
 
     df = pd.DataFrame(documents, columns=["content"])
     df["content"] = df["content"].apply(preprocess)
-    df["content"] = df["content"].apply(count_frequency(documents))
+    filtered_words = count_frequency(list(df["content"].values))
+    df["content"] = df["content"].apply(filter)
     return df
