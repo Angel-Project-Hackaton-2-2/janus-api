@@ -7,7 +7,6 @@ import numpy as np
 
 nltk.download("stopwords")
 nltk.download("wordnet")
-
 lemmatizer = WordNetLemmatizer()
 
 

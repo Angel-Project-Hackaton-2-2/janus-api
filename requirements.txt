@@ -8,4 +8,5 @@ scikit-learn
 nltk
 pymongo
 python-dotenv
+kafka-python
 annoy
