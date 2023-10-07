@@ -1,12 +1,10 @@
-import nltk
 from nltk.stem import WordNetLemmatizer
 import string
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
+import pandas as pd
 
-nltk.download("stopwords")
-nltk.download("wordnet")
 lemmatizer = WordNetLemmatizer()
 
 
@@ -51,3 +49,13 @@ def count_frequency(documents, threshold=0.1):
 
     filtered_documents = list(map(filter, documents))
     return filtered_documents
+
+
+def vectorize_diary(diary):
+    diary = diary["data"]["diaries"]
+    documents = [entry["content"] for entry in diary]
+
+    df = pd.DataFrame(documents, columns=["content"])
+    df["content"] = df["content"].apply(preprocess)
+    df["content"] = df["content"].apply(count_frequency(documents))
+    return df
