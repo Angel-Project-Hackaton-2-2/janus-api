@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from api.user import router as user_router
 from api.conversation import router as conversation_router
 from api.diary import router as diary_router, get_diaries
+from api.query import router as prompt_router
 from dotenv import load_dotenv
 from utils import vectorize_diary
 from models.semantic import calculate_embedding
@@ -27,3 +28,4 @@ async def test(fingerprint: str):
 app.include_router(user_router)
 app.include_router(conversation_router)
 app.include_router(diary_router)
+app.include_router(prompt_router)
