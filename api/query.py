@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException, Request
 from api import client
 from dotenv import load_dotenv
-import os
-import openai
+from models.semantic import calculate_embedding
+from api.diary import get_diaries
+from utils import vectorize_diary
 
 load_dotenv()
 router = APIRouter()
@@ -57,6 +58,15 @@ async def insert_prompt(request: Request, fingerprint: str):
     prompt_collections.update_one(
         {"fingerprint": fingerprint},
         {"$push": {"messages": {"role": "user", "content": message}}},
+    )
+
+    diary = await get_diaries(fingerprint)
+    diary = vectorize_diary(diary)
+    response = calculate_embedding(diary, message)
+
+    prompt_collections.update_one(
+        {"fingerprint": fingerprint},
+        {"$push": {"messages": {"role": "assistant", "content": response['content']}}},
     )
 
     return {"status": "success", "status_code": 200}
