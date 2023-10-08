@@ -31,22 +31,25 @@ def calculate_embedding(df, query):
     )
 
     results = pd.DataFrame(
-        {"texts": df.iloc[similar_item_ids[0]]["content"], "distance": similar_item_ids[1]}
+        {
+            "texts": df.iloc[similar_item_ids[0]]["content"],
+            "distance": similar_item_ids[1],
+        }
     )
 
     response = co.summarize(
         text=results.iloc[0]["texts"],
         model="command",
-        length="long",
+        length="short",
         extractiveness="high",
     )
 
     summary = response.summary
-    prompt = f"""Generate a statement from answer using 2nd person pov
+    prompt = f"""Generate statement from the answer using 2nd person pov
 
-    question: {query}
-    answer: {summary}
-    """
+question: {query}
+answer: {summary}
+"""
 
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo", messages=[{"role": "user", "content": prompt}]
