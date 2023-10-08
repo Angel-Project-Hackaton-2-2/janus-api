@@ -5,7 +5,7 @@ from api import client
 
 def tune_friend(fingerprint: str):
     res = openai.File.create(
-        file=open("models/datasets/friend.json", "r"), purpose="fine-tune"
+        file=open("models/datasets/counsellor.jsonl", "r"), purpose="fine-tune"
     )
 
     file_id = res["id"]
