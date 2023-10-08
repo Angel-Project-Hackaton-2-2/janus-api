@@ -18,7 +18,7 @@ async def root():
 
 @app.get("/tune/{fingerprint}/{conversation_type}")
 async def fine_tune(fingerprint: str, conversation_type: str):
-    response = tune.tune_friend(fingerprint, conversation_type)
+    response = tune.tune(fingerprint, conversation_type)
     return response
 
 
