@@ -9,7 +9,7 @@ load_dotenv()
 router = APIRouter()
 
 
-@router.post("/api/prompt/{fingerprint}")
+@router.get("/api/prompt/{fingerprint}")
 async def create_prompt(fingerprint: str):
     db = client.get_db()
     prompt_collections = db["prompts"]
