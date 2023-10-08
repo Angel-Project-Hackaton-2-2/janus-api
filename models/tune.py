@@ -1,5 +1,4 @@
 import openai
-from time import sleep
 from api import client
 
 
@@ -16,13 +15,7 @@ def tune(fingerprint: str, conversation_type: str):
     file_id = res["id"]
     res = openai.FineTuningJob.create(training_file=file_id, model="gpt-3.5-turbo")
     job_id = res["id"]
-    while True:
-        res = openai.FineTuningJob.retrieve(job_id)
-        if res["finished_at"] != None:
-            break
-        else:
-            print(".", end="")
-            sleep(100)
+    res = openai.FineTuningJob.retrieve(job_id)
     ft_model = res["fine_tuned_model"]
 
     db = client.get_db()
