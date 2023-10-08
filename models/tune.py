@@ -31,5 +31,4 @@ def tune(fingerprint: str, conversation_type: str):
     return {
         "status": "success",
         "status_code": 200,
-        "message": "Fine-tuned model for friend conversation",
     }
