@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from api.user import router as user_router
 from api.conversation import router as conversation_router
 from api.diary import router as diary_router
-from api.query import router as prompt_router
 from dotenv import load_dotenv
 from models import tune
 
@@ -30,4 +29,3 @@ async def test():
 app.include_router(user_router)
 app.include_router(conversation_router)
 app.include_router(diary_router)
-app.include_router(prompt_router)
