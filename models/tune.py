@@ -3,10 +3,15 @@ from time import sleep
 from api import client
 
 
-def tune_friend(fingerprint: str):
-    res = openai.File.create(
-        file=open("models/datasets/counsellor.jsonl", "r"), purpose="fine-tune"
-    )
+def tune(fingerprint: str, conversation_type: str):
+    if conversation_type == "friend":
+        res = openai.File.create(
+            file=open("models/datasets/friend.jsonl", "r"), purpose="fine-tune"
+        )
+    else:
+        res = openai.File.create(
+            file=open("models/datasets/counsellor.jsonl", "r"), purpose="fine-tune"
+        )
 
     file_id = res["id"]
     res = openai.FineTuningJob.create(training_file=file_id, model="gpt-3.5-turbo")
