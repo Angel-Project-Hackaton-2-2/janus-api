@@ -20,13 +20,24 @@ def tune(fingerprint: str, conversation_type: str):
 
     db = client.get_db()
     model_collections = db["models"]
-    model_collections.insert_one(
-        {
-            "fingerprint": fingerprint,
-            "conversation_type": "friend",
-            "models": [{"id": job_id, "name": ft_model}],
-        }
+
+    model = model_collections.find_one(
+        {"fingerprint": fingerprint, "conversation_type": conversation_type}
     )
+
+    if model:
+        model_collections.update_one(
+            {"fingerprint": fingerprint, "conversation_type": conversation_type},
+            {"$push": {"models": {"id": job_id, "name": ft_model}}},
+        )
+    else:
+        model_collections.insert_one(
+            {
+                "fingerprint": fingerprint,
+                "conversation_type": conversation_type,
+                "models": [{"id": job_id, "name": ft_model}],
+            }
+        )
 
     return {
         "status": "success",
