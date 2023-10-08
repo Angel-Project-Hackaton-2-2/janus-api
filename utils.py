@@ -38,8 +38,8 @@ def lemmatize(text):
 
 def preprocess(text):
     text = lower_text(text)
-    text = remove_punctuation(text)
     text = remove_stopwords(text)
+    text = remove_punctuation(text)
     text = lemmatize(text)
     text = remove_whitespace(text)
     return text

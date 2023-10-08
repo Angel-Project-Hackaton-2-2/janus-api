@@ -1,11 +1,10 @@
 from fastapi import FastAPI
 from api.user import router as user_router
 from api.conversation import router as conversation_router
-from api.diary import router as diary_router, get_diaries
+from api.diary import router as diary_router
 from api.query import router as prompt_router
 from dotenv import load_dotenv
-from utils import vectorize_diary
-from models.semantic import calculate_embedding
+from models import tune
 
 load_dotenv()
 
@@ -17,12 +16,16 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/test/{fingerprint}")
-async def test(fingerprint: str):
-    diary = await get_diaries(fingerprint)
-    diary = vectorize_diary(diary)
-    response = calculate_embedding(diary, "What did i get for my 18th birthday?")
-    return {"response": response}
+@app.get("/tune/{fingerprint}/{conversation_type}")
+async def fine_tune(fingerprint: str, conversation_type: str):
+    if conversation_type == "friend":
+        response = tune.tune_friend(fingerprint)
+    return response
+
+
+@app.get("/test")
+async def test():
+    return {"response": "test"}
 
 
 app.include_router(user_router)
