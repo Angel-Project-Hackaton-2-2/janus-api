@@ -17,7 +17,7 @@ class MongoDBClient:
             cls._instance = super(MongoDBClient, cls).__new__(cls)
             # Initialize the MongoDB client here
             cls._instance._client = MongoClient(
-                f"mongodb+srv://{DB_USER}:{DB_PASS}@{DB_NAME}/"
+                f"mongodb+srv://{DB_USER}:{DB_PASS}@{DB_NAME}/?retryWrites=true&w=majority"
             )
             cls._instance._db = cls._instance._client["angelproject"]
         return cls._instance
