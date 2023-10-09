@@ -37,18 +37,20 @@ def calculate_embedding(df, query):
         }
     )
 
-    response = co.summarize(
-        text=results.iloc[0]["texts"],
-        model="command",
-        length="short",
-        extractiveness="high",
-    )
+    summary = None
+    if len(results.iloc[0]["texts"]) > 250:
+        response = co.summarize(
+            text=results.iloc[0]["texts"],
+            model="command",
+            length="short",
+            extractiveness="high",
+        )
 
-    summary = response.summary
+        summary = response.summary
     prompt = f"""Generate statement from the answer using 2nd person pov
 
 question: {query}
-answer: {summary}
+answer: {summary if summary is not None else results.iloc[0]["texts"]}
 """
 
     response = openai.ChatCompletion.create(

@@ -45,7 +45,7 @@ def preprocess(text):
     return text
 
 
-def count_frequency(documents, threshold=0.1):
+def count_frequency(documents, threshold=0.2):
     vectorizer = TfidfVectorizer()
     X = vectorizer.fit_transform(documents)
     feature_names = vectorizer.get_feature_names_out()
