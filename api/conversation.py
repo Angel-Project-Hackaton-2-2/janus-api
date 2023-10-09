@@ -16,7 +16,7 @@ router = APIRouter()
 @router.post("/api/conversation/{fingerprint}/{type}")
 async def create_conversation(request: Request, fingerprint: str, type: str):
     db = client.get_db()
-    if type == "conversation":
+    if type == "counseling":
         conversation_collections = db["conversations"]
 
         data = await request.json()
@@ -73,7 +73,7 @@ async def create_message(
     request: Request, fingerprint: str, conversation_type: str, type: str
 ):
     db = client.get_db()
-    if type == "conversation":
+    if type == "counseling":
         conversation_collections = db["conversations"]
 
         # validation for text messages
@@ -193,7 +193,7 @@ async def create_message(
 @router.get("/api/conversation/{fingerprint}/{conversation_type}/{type}")
 async def get_conversastion(fingerprint: str, conversation_type: str, type: str):
     db = client.get_db()
-    if type == "conversation":
+    if type == "counseling":
         conversation_collections = db["conversations"]
 
         conversation = conversation_collections.find_one(
