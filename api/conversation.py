@@ -190,17 +190,28 @@ async def create_message(
     }
 
 
-@router.get("/api/conversation/{fingerprint}/{conversation_type}")
-async def get_conversastion(fingerprint: str, conversation_type: str):
+@router.get("/api/conversation/{fingerprint}/{conversation_type}/{type}")
+async def get_conversastion(fingerprint: str, conversation_type: str, type: str):
     db = client.get_db()
-    conversation_collections = db["conversations"]
+    if type == "conversation":
+        conversation_collections = db["conversations"]
 
-    conversation = conversation_collections.find_one(
-        {"fingerprint": fingerprint, "conversation_type": conversation_type}
-    )
+        conversation = conversation_collections.find_one(
+            {"fingerprint": fingerprint, "conversation_type": conversation_type}
+        )
 
-    if conversation is None:
-        return HTTPException(status_code=400, detail="Conversation not found")
+        if conversation is None:
+            return HTTPException(status_code=400, detail="Conversation not found")
 
-    conversation["_id"] = str(conversation["_id"])
-    return {"status": "success", "status_code": 200, "data": conversation}
+        conversation["_id"] = str(conversation["_id"])
+        return {"status": "success", "status_code": 200, "data": conversation}
+    elif type == "diary":
+        prompt_collections = db["prompts"]
+
+        prompt = prompt_collections.find_one({"fingerprint": fingerprint})
+
+        if prompt is None:
+            return HTTPException(status_code=400, detail="Prompt not found")
+
+        prompt["_id"] = str(prompt["_id"])
+        return {"status": "success", "status_code": 200, "data": prompt}
