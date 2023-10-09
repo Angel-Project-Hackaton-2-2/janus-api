@@ -183,7 +183,11 @@ async def create_message(
                 }
             },
         )
-    return {"status": "success", "status_code": 200, "data": {"message": new_message}}
+    return {
+        "status": "success",
+        "status_code": 200,
+        "data": {"role": "assistant", "content": response["content"]},
+    }
 
 
 @router.get("/api/conversation/{fingerprint}/{conversation_type}")
