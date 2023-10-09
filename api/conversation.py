@@ -68,7 +68,7 @@ async def create_conversation(request: Request, fingerprint: str, type: str):
     return {"status": "success", "status_code": 200}
 
 
-@router.post("/api/conversation/{fingerprint}/{conversation_type}/{type}")
+@router.post("/api/conversation/{fingerprint}/{type}")
 async def create_message(
     request: Request, fingerprint: str, conversation_type: str, type: str
 ):
@@ -85,16 +85,13 @@ async def create_message(
         if not isinstance(message, str):
             return HTTPException(status_code=400, detail="Invalid request body")
 
-        conversation = conversation_collections.find_one(
-            {"fingerprint": fingerprint, "conversation_type": conversation_type}
-        )
+        conversation = conversation_collections.find_one({"fingerprint": fingerprint})
 
         if conversation is None:
             # create conversation if not exists
             conversation_collections.insert_one(
                 {
                     "fingerprint": fingerprint,
-                    "conversation_type": conversation_type,
                     "messages": [
                         {
                             "role": "assistant",
@@ -104,9 +101,7 @@ async def create_message(
                 }
             )
 
-        conversation = conversation_collections.find_one(
-            {"fingerprint": fingerprint, "conversation_type": conversation_type}
-        )
+        conversation = conversation_collections.find_one({"fingerprint": fingerprint})
 
         new_message = {"role": "user", "content": message}
         # insert the message into mongodb
@@ -190,15 +185,13 @@ async def create_message(
     }
 
 
-@router.get("/api/conversation/{fingerprint}/{conversation_type}/{type}")
+@router.get("/api/conversation/{fingerprint}/{type}")
 async def get_conversastion(fingerprint: str, conversation_type: str, type: str):
     db = client.get_db()
     if type == "counseling":
         conversation_collections = db["conversations"]
 
-        conversation = conversation_collections.find_one(
-            {"fingerprint": fingerprint, "conversation_type": conversation_type}
-        )
+        conversation = conversation_collections.find_one({"fingerprint": fingerprint})
 
         if conversation is None:
             return HTTPException(status_code=400, detail="Conversation not found")
